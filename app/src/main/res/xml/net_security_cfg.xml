@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--解决加载h5页面报net::ERR_CLEARTEXT_NOT_PERMITTED的错-->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
