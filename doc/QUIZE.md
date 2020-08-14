@@ -34,6 +34,10 @@
 ### 在JS和原生交互时候，WebChromeClient非常重要。
 
 ## 2.WebView.loadUrl时跳转系统的浏览器
+出现跳转系统浏览器的链接具备下述条件:
+* http链接(https不会)
+* 域名链接，非具体，如http://172.1.1.1:8080/xx.html,这种是不会的  
+跳转过去调用系统浏览器统一变成https链接
 重写WebViewClient的shouldOverrideUrlLoading(WebView view, String url)使用view.loadUrl(url);加载url  
 网上的写法:
 ```
