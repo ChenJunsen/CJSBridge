@@ -56,7 +56,7 @@ public class CJSWebView extends WebView {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 //        }
-//        webSettings.setJavaScriptEnabled(true);
-        setWebViewClient(new CJSWebClient());
+        setWebViewClient(new CJSWebClient((Activity) getContext()));
+        setWebChromeClient(new CJSWebChromeClient((Activity) getContext()));
     }
 }
