@@ -1,12 +1,14 @@
 package com.cjs.cjsbridge.web;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.webkit.ConsoleMessage;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import com.cjs.cjsbridge.dialog.MsgDialog;
 import com.cjs.cjsbridge.tools.L;
 
 /**
@@ -39,6 +41,8 @@ public class CJSWebChromeClient extends WebChromeClient {
     private boolean enableH5AlertLog = true;
     private boolean enableH5PromptLog = true;
     private boolean enableH5ConfirmLog = true;
+
+    private boolean replaceWithNativeAlert = true;//是否将alert替换为原生对话框形式
 
     public CJSWebChromeClient(Activity activity) {
         this.activity = activity;
@@ -85,14 +89,24 @@ public class CJSWebChromeClient extends WebChromeClient {
      * @return
      */
     @Override
-    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+    public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
         if (enableH5AlertLog) {
             String fmt = "[源:%1$s";
             String fmt2 = "msg:%1$s]";
             L.d(H5AlertTag, String.format(fmt, url));
             L.d(H5AlertTag, String.format(fmt2, message));
         }
-        return super.onJsAlert(view, url, message, result);
+        if (replaceWithNativeAlert) {
+            MsgDialog.show1(activity, message, new MsgDialog.DialogListenerSimple() {
+                @Override
+                public void onSubmit(DialogInterface dialog) {
+                    result.confirm();
+                }
+            });
+            return true;
+        } else {
+            return super.onJsAlert(view, url, message, result);
+        }
     }
 
 
@@ -119,9 +133,10 @@ public class CJSWebChromeClient extends WebChromeClient {
     /**
      * 拦截H5的prompt弹窗
      * 该弹窗为一个可输入的确认弹窗，默认样式比较丑，而且使用度和alert,confirm比起来低，所以可以采用它进行混合交互
+     *
      * @param view
      * @param url
-     * @param message 对话框文本信息
+     * @param message      对话框文本信息
      * @param defaultValue 默认设置的输入值
      * @param result
      * @return
