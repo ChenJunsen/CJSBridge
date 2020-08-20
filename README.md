@@ -43,3 +43,15 @@
         ....      
     }              
     ```
+
+* 原生调用H5的方法  
+  1.核心方法是安卓webView里的
+  ```
+  evaluateJavascript(javascript, new ValueCallback<String>() {
+      @Override
+      public void onReceiveValue(String value) {
+          
+      }
+  });
+  ```
+  但是该方法只在api-19以上有效
