@@ -1,0 +1,22 @@
+ArrayMap 与 HashMap对比
+ArrayMap是安卓独有的数据结构，HashMap在Java中就有了
+二者都是非线程安全
+
+ArrayMap 与 HashMap比较？优缺点？应用场景？
+比较：
+1、ArrayMap采用的数据结构是两个一维数组，而HashMap使用的是一维数组和单链表数据结构
+2、ArrayMap默认容量为0，而HashMap默认容量是16
+3、ArrayMap没有最大容量的限制，直到报oom，而HashMap最大容量最大是Integer.MAX_VALUE
+4、ArrayMap默认每次扩容时原来容量一半的增量；而HashMap默认每次扩容时原来容量0.75倍的增量
+优点：
+1、相比HashMap内存空间更优，因为比HashMap少了一个实体类进行装饰
+2、容量为4或者8时又缓存复用功能
+3、扩容比HashMap高效，因为HashMap扩容时相当于重构，需要重新重新计算hash值和移动元素；而ArrayMap扩容时只需拷贝
+缺点：
+1、数据量大的情况下查询效率比HashMap差
+2、存取效率比HashMap低，因为每次存取都需要二分法找到对应的下标
+3、没有实现Serializable，不便在Android bundle进行传输
+
+使用场景：
+1、数据量小，建议百量级别
+2、内存要求高
