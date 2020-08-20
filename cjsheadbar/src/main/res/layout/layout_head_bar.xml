@@ -7,22 +7,46 @@
     <FrameLayout
         android:id="@+id/back"
         android:layout_width="45dp"
-        android:layout_centerVertical="true"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:layout_centerVertical="true">
+
         <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:srcCompat="@drawable/arrow_left_black"/>
+            app:srcCompat="@drawable/arrow_left_black" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#333"
         android:layout_centerInParent="true"
-        android:textSize="@dimen/size_head_title"/>
+        android:textColor="#333"
+        android:textSize="@dimen/size_head_title" />
+
+    <FrameLayout
+        android:id="@+id/right"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_refresh" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_height="1px"
+        android:background="#333333"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"/>
 
 
 </RelativeLayout>

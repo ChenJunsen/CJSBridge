@@ -15,17 +15,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+
+/**
+ * 自定义标题栏
+ *
+ * @author JasonChen
+ * @email chenjunsen@outlook.com
+ * @createTime 2020/8/17 0017 14:33
+ */
 public class CJSHeadBar extends FrameLayout {
 
-    private FrameLayout head_back;
+    private FrameLayout head_back, head_right;
     private TextView head_title;
+    private View divider;
 
     private String title;
+    private boolean showBottomDivider;
 
     private OnBackClickListener onBackClickListener;
+    private OnRightClickListener onRightClickListener;
 
     private Context context;
 
+    /**
+     * 设置返回点击监听器
+     *
+     * @param onBackClickListener
+     */
     public void setOnBackClickListener(final OnBackClickListener onBackClickListener) {
         this.onBackClickListener = onBackClickListener;
         if (head_back != null) {
@@ -38,6 +54,27 @@ public class CJSHeadBar extends FrameLayout {
                         if (context instanceof Activity) {
                             ((Activity) context).finish();
                         }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * 设置标题栏右侧按钮点击监听器
+     *
+     * @author JasonChen
+     * @email chenjunsen@outlook.com
+     * @createTime 2020/8/17 0017 14:50
+     */
+    public void setOnRightClickListener(final OnRightClickListener onRightClickListener) {
+        this.onRightClickListener = onRightClickListener;
+        if (head_right != null) {
+            head_right.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onRightClickListener != null) {
+                        onRightClickListener.onRightClick(v);
                     }
                 }
             });
@@ -67,16 +104,20 @@ public class CJSHeadBar extends FrameLayout {
 
     private void init(final Context context, AttributeSet attrs) {
         this.context = context;
-        View headBarView = LayoutInflater.from(context).inflate(R.layout.layout_head_bar, this, true);
+        LayoutInflater.from(context).inflate(R.layout.layout_head_bar, this, true);
         head_back = findViewById(R.id.back);
         head_title = findViewById(R.id.tv_title);
+        head_right = findViewById(R.id.right);
+        divider = findViewById(R.id.divider);
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CJSHeadBar);
             title = array.getString(R.styleable.CJSHeadBar_title);
+            showBottomDivider = array.getBoolean(R.styleable.CJSHeadBar_showBottomDivider, true);
             array.recycle();
         }
         setTitle(title);
         setOnBackClickListener(onBackClickListener);
+        setOnRightClickListener(onRightClickListener);
         if (getBackground() == null) {
             setBackgroundColor(Color.WHITE);
         }
@@ -87,6 +128,11 @@ public class CJSHeadBar extends FrameLayout {
         return title;
     }
 
+    /**
+     * 设置标题文字
+     *
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
         if (head_title != null) {
@@ -94,7 +140,52 @@ public class CJSHeadBar extends FrameLayout {
         }
     }
 
+    public boolean isShowBottomDivider() {
+        return showBottomDivider;
+    }
+
+    /**
+     * 设置是否显示底部分割线
+     *
+     * @param showBottomDivider
+     */
+    public void setShowBottomDivider(boolean showBottomDivider) {
+        this.showBottomDivider = showBottomDivider;
+        if (divider != null) {
+            divider.setVisibility(showBottomDivider ? View.VISIBLE : View.GONE);
+        }
+    }
+
+
+    /**
+     * 返回监听器
+     *
+     * @author JasonChen
+     * @email chenjunsen@outlook.com
+     * @createTime 2020/8/17 0017 14:32
+     */
     public interface OnBackClickListener {
+        /**
+         * 返回键点击
+         *
+         * @param v
+         */
         void onBackClick(View v);
+    }
+
+    /**
+     * 右键点击监听
+     *
+     * @author JasonChen
+     * @email chenjunsen@outlook.com
+     * @createTime 2020/8/17 0017 14:48
+     */
+    public interface OnRightClickListener {
+        /**
+         * 右键点击
+         *
+         * @param v
+         */
+        void onRightClick(View v);
     }
 }
