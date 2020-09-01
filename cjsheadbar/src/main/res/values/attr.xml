@@ -3,5 +3,6 @@
     <declare-styleable name="CJSHeadBar">
         <attr name="title" format="string" />
         <attr name="showBottomDivider" format="boolean"/>
+        <attr name="showRightIcon" format="boolean"/>
     </declare-styleable>
 </resources>

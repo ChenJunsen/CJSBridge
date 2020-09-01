@@ -31,6 +31,7 @@ public class CJSHeadBar extends FrameLayout {
 
     private String title;
     private boolean showBottomDivider;
+    private boolean showRightIcon;
 
     private OnBackClickListener onBackClickListener;
     private OnRightClickListener onRightClickListener;
@@ -113,11 +114,13 @@ public class CJSHeadBar extends FrameLayout {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CJSHeadBar);
             title = array.getString(R.styleable.CJSHeadBar_title);
             showBottomDivider = array.getBoolean(R.styleable.CJSHeadBar_showBottomDivider, true);
+            showRightIcon = array.getBoolean(R.styleable.CJSHeadBar_showRightIcon, true);
             array.recycle();
         }
         setTitle(title);
         setOnBackClickListener(onBackClickListener);
         setOnRightClickListener(onRightClickListener);
+        setShowRightIcon(showRightIcon);
         if (getBackground() == null) {
             setBackgroundColor(Color.WHITE);
         }
@@ -153,6 +156,13 @@ public class CJSHeadBar extends FrameLayout {
         this.showBottomDivider = showBottomDivider;
         if (divider != null) {
             divider.setVisibility(showBottomDivider ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    public void setShowRightIcon(boolean showRightIcon) {
+        this.showRightIcon = showRightIcon;
+        if (head_right != null) {
+            head_right.setVisibility(showRightIcon ? View.VISIBLE : View.GONE);
         }
     }
 
