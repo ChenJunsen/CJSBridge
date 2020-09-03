@@ -14,6 +14,11 @@
 /doc/安卓WebView的一些漏洞及解决办法.pdf
 ```
 
+### H5的模板代码和JS代码参考
+```
+/h5
+```
+
 ### WebView和H5交互的方式
 * @JavascriptInterface方式实现  
 主体思路：  
