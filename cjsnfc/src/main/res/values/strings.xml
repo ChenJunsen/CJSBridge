@@ -1,0 +1,6 @@
+<resources>
+    <string name="default_nfc_read_tag">请将您的IC卡贴近于手机背面NFC区域</string>
+    <string name="default_warning_not_support_nfc">不支持NFC功能</string>
+    <string name="default_warning_not_open_nfc">NFC功能还未开启，请先打开手机NFC再使用此功能</string>
+    <string name="default_error_read_nfc">读取NFC数据失败</string>
+</resources>
