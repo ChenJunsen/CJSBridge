@@ -16,7 +16,7 @@
      * 代码-非法SID
      * @type {number}
      */
-    const CJSB_ERR_INVALID_SID = -776
+    const CJSB_ERR_INVALID_SID = -999
     /**
      * js桥的scheme自定义协议名字
      * @type {string}
@@ -82,17 +82,19 @@
     function parseParams(pStr) {
         var params = {}
         try {
-            params = JSON.parse(pStr)
-            if (!hasOwnProperty(params, 'Rej_Code')) {
-                params['Rej_Code'] = '000000'
-                params['Rej_Msg'] = '成功'
+            if(typeof pStr === 'string'){
+                params = JSON.parse(pStr)
+            }
+            if (!hasOwnProperty(params, 'cjsb_status')) {
+                params['cjsb_status'] = '1'
+                params['cjsb_msg'] = '成功'
             }
         } catch (e) {
             L.e("解析原生传参失败:")
             L.e(e)
             params = {
-                Rej_Code: CJSB_ERR_PARSE_PARAMS,
-                Rej_Msg: '参数解析失败'
+                cjsb_status: CJSB_ERR_PARSE_PARAMS,
+                cjsb_msg: '参数解析失败'
             }
         }
         return params
@@ -168,7 +170,6 @@
             callNative(bridgeName, methodName, params, sid)
         },
         callBack: function (sid, data) {
-            // var call=
             var callB = unRegisterCall(sid)
             if (typeof callB === 'function') {
                 callB(parseParams(data))
