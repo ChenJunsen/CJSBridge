@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         head:title="测试的标题栏"/>
 
-    <com.cjs.cjsbridge.web.CJSWebView
+    <com.cjs.cjsbridge.web.CJSWebView2
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -11,40 +11,43 @@ import android.webkit.WebView;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cjs.cjsbridge.jsi.CJSInterface;
+import com.cjs.cjsbridge.core.CJSBridge;
+import com.cjs.cjsbridge.core.exception.CJSBException;
+import com.cjs.cjsbridge.scheme.CJScheme;
 import com.cjs.cjsbridge.tools.L;
 
 
 /**
- * 自定义webView addJavascriptInterface版
+ * 自定义WebView 重写onJsPrompt版
  * @author JasonChen
  * @email chenjunsen@outlook.com
- * @createTime 2020/8/31 0031 16:35
+ * @createTime 2020/8/31 0031 15:26
  */
-public class CJSWebView extends WebView {
+public class CJSWebView2 extends WebView implements CJSActionDispatcher {
+    private CJSWebChromeClient2 cjsWebChromeClient;
 
-    public CJSWebView(Context context) {
+    public CJSWebView2(Context context) {
         super(context);
         init(context);
     }
 
-    public CJSWebView(Context context, AttributeSet attrs) {
+    public CJSWebView2(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public CJSWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CJSWebView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public CJSWebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CJSWebView2(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
-    public CJSWebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
+    public CJSWebView2(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
         super(context, attrs, defStyleAttr, privateBrowsing);
         init(context);
     }
@@ -52,8 +55,8 @@ public class CJSWebView extends WebView {
     private void init(Context context) {
         L.i(">>>>>>>>>>>>>>>>> CJSWebView initializing <<<<<<<<<<<<<<<<<");
         //注入JS插件，并且给这个插件取一个别名CJSI,在H5端通过这个别名来调用相关方法
-        addJavascriptInterface(new CJSInterface((Activity) context), "CJSI");
-        L.d("注入JS插件:CJSI");
+//        addJavascriptInterface(new CJSInterface((Activity) context), "CJSI");
+//        L.d("注入JS插件:CJSI");
 
         WebSettings webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -68,8 +71,11 @@ public class CJSWebView extends WebView {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setWebContentsDebuggingEnabled(true);//开启内嵌日志调试工具
         }*/
+
+        cjsWebChromeClient=new CJSWebChromeClient2((Activity) getContext());
+        cjsWebChromeClient.setCjsActionDispatcher(this);
         setWebViewClient(new CJSWebClient((Activity) getContext()));
-        setWebChromeClient(new CJSWebChromeClient((Activity) getContext()));
+        setWebChromeClient(cjsWebChromeClient);
     }
 
     /**
@@ -82,6 +88,21 @@ public class CJSWebView extends WebView {
         String jsFmt = "javascript:%1$s(%2$s)";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             evaluateJavascript(String.format(jsFmt, methodName, params.toJSONString()), callback);
+        }
+    }
+
+
+    /**
+     * 分发处理接收到的H5指令和参数
+     * @param webView
+     * @param cjScheme
+     */
+    @Override
+    public void dispatchH5Action(WebView webView, CJScheme cjScheme) {
+        try {
+            CJSBridge.getInstance().callNative(webView, cjScheme);
+        } catch (CJSBException e) {
+            e.printStackTrace();
         }
     }
 }

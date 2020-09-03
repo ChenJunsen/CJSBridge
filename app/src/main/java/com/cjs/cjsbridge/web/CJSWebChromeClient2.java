@@ -2,6 +2,7 @@ package com.cjs.cjsbridge.web;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.webkit.ConsoleMessage;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -9,10 +10,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.cjs.cjsbridge.dialog.MsgDialog;
+import com.cjs.cjsbridge.scheme.CJScheme;
+import com.cjs.cjsbridge.scheme.CJSchemeParser;
 import com.cjs.cjsbridge.tools.L;
 
 /**
- * 自定义WebChromeClient（addJavascriptInterface版）
+ * 自定义WebChromeClient(重写onJsPrompt版)
  * <ul>
  *     <li>WebChromeClient是辅助WebView处理Javascript的对话框，网站图标，网站title，加载进度等</li>
  *     <li>onCloseWindow(关闭WebView)</li>
@@ -30,22 +33,22 @@ import com.cjs.cjsbridge.tools.L;
  * @email chenjunsen@outlook.com
  * @createTime 2020/8/12 0012 18:04
  */
-public class CJSWebChromeClient extends WebChromeClient {
+public class CJSWebChromeClient2 extends WebChromeClient {
     private static final String H5ConTag = "H5Console";
     private static final String H5AlertTag = "H5Alert";
     private static final String H5ConfirmTag = "H5Confirm";
 
     Activity activity;
 
-    private boolean enableH5ConsoleLog = true;
-    private boolean enableH5AlertLog = true;
-    private boolean enableH5PromptLog = true;
-    private boolean enableH5ConfirmLog = true;
+    public boolean enableH5ConsoleLog = true;
+    public boolean enableH5AlertLog = true;
+    public boolean enableH5PromptLog = true;
+    public boolean enableH5ConfirmLog = true;
 
     private boolean replaceWithNativeAlert = true;
-    private CJSActionDispatcher cjsListener;
+    private CJSActionDispatcher cjsActionDispatcher;
 
-    public CJSWebChromeClient(Activity activity) {
+    public CJSWebChromeClient2(Activity activity) {
         this.activity = activity;
     }
 
@@ -144,7 +147,21 @@ public class CJSWebChromeClient extends WebChromeClient {
      */
     @Override
     public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-        return super.onJsPrompt(view, url, message, defaultValue, result);
+        if (!TextUtils.isEmpty(message)) {
+            //解析自定义协议
+            CJScheme cjScheme = CJSchemeParser.parse(message);
+            if (CJSchemeParser.CJSB_BRIDGE_SCHEME.equals(cjScheme.getScheme())) {
+                if (cjsActionDispatcher != null) {
+                    cjsActionDispatcher.dispatchH5Action(view, cjScheme);
+                }
+            } else {
+                L.i("invalid scheme for parsing:" + cjScheme.getScheme());
+            }
+        } else {
+            L.d("Empty message onJsPrompt,no url scheme parse action");
+        }
+        result.confirm("ok");//关键步骤 需要调用该方法，让webView认为事件执行完毕，不写这步会让WebView卡住
+        return true;
     }
 
     /**
@@ -165,7 +182,11 @@ public class CJSWebChromeClient extends WebChromeClient {
         this.replaceWithNativeAlert = replaceWithNativeAlert;
     }
 
-    public void setCjsListener(CJSActionDispatcher cjsListener) {
-        this.cjsListener = cjsListener;
+    /**
+     * 设置JS处理监听器
+     * @param cjsActionDispatcher
+     */
+    public void setCjsActionDispatcher(CJSActionDispatcher cjsActionDispatcher) {
+        this.cjsActionDispatcher = cjsActionDispatcher;
     }
 }

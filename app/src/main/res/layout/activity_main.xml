@@ -4,12 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/androidID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btn_go_to_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="跳转CJSWebActivity"/>
+    <Button
+        android:id="@+id/btn_read_nfc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NFC读取"/>
 
 </LinearLayout>
