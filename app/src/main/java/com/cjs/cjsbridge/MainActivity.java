@@ -11,9 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cjs.cjsbridge.dialog.MsgDialog;
-import com.cjs.cjsbridge.tools.L;
-import com.cjs.cjsbridge.web.CJSWebActivity;
+import com.cjs.cjsbridge.web.CJSWebActivityPrompt;
+import com.cjs.cjsbridge.web.CJSWebActivitySimple;
+import com.cjs.cjsbridge_common.tools.L;
+import com.cjs.cjsbridge_ui.dialog.MsgDialog;
 import com.cjs.sdk.cjsnfc.NFCScanningActivity;
 import com.cjs.sdk.cjsnfc.nt.NfcMainNewActivity;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btn_go_to_1;
+    private Button btn_go_to_1,btn_go_to_2;
     private Button btn_read_nfc;
 
     @Override
@@ -29,13 +30,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_go_to_1 = findViewById(R.id.btn_go_to_1);
+        btn_go_to_2 = findViewById(R.id.btn_go_to_2);
         btn_read_nfc = findViewById(R.id.btn_read_nfc);
 
         btn_go_to_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CJSWebActivity.class);
-                i.putExtra("title", "测试的网页1");
+                Intent i = new Intent(MainActivity.this, CJSWebActivitySimple.class);
+                i.putExtra("title", "测试的网页Simple");
+//                i.putExtra("url", "http://www.baidu.com");
+//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
+                i.putExtra("url", "http://172.1.2.62:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));
+//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
+                startActivity(i);
+            }
+        });
+
+        btn_go_to_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, CJSWebActivityPrompt.class);
+                i.putExtra("title", "测试的网页Prompt");
 //                i.putExtra("url", "http://www.baidu.com");
 //                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
                 i.putExtra("url", "http://172.1.2.62:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));

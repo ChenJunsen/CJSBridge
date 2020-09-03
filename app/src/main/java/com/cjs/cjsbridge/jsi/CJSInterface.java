@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.cjs.cjsbridge.tools.L;
+import com.cjs.cjsbridge_common.tools.L;
 
 /**
  * JS交互接口，适用于原生自带的{@link android.webkit.WebView#addJavascriptInterface(Object, String)}方法

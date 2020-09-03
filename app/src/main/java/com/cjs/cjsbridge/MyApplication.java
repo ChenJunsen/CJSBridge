@@ -2,8 +2,8 @@ package com.cjs.cjsbridge;
 
 import android.app.Application;
 
-import com.cjs.cjsbridge.core.CJSBridge;
 import com.cjs.cjsbridge.jsi.UIPlugin;
+import com.cjs.cjsbridge_prompt.core.CJSBridge;
 
 public class MyApplication extends Application {
     @Override

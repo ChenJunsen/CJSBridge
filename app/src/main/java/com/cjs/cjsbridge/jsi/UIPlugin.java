@@ -6,13 +6,13 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cjs.cjsbridge.core.CJSBCallBack;
-import com.cjs.cjsbridge.core.CJSBH5Plugin;
-import com.cjs.cjsbridge.core.annotation.JSI;
-import com.cjs.cjsbridge.dialog.MsgDialog;
+import com.cjs.cjsbridge_prompt.core.CJSBCallBack;
+import com.cjs.cjsbridge_prompt.core.CJSBH5Plugin;
+import com.cjs.cjsbridge_prompt.core.annotation.JSI;
+import com.cjs.cjsbridge_ui.dialog.MsgDialog;
 
 /**
- * H5交互插件(UI模块)
+ * H5交互插件(UI模块)(适用于{@link com.cjs.cjsbridge_prompt.core.CJSBridge})
  *
  * @author JasonChen
  * @email chenjunsen@outlook.com

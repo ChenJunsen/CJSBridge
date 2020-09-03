@@ -16,7 +16,12 @@
         android:id="@+id/btn_go_to_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="跳转CJSWebActivity"/>
+        android:text="跳转CJSWebActivitySimple"/>
+    <Button
+        android:id="@+id/btn_go_to_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转CJSWebActivityPrompt"/>
     <Button
         android:id="@+id/btn_read_nfc"
         android:layout_width="wrap_content"

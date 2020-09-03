@@ -9,7 +9,7 @@
     android:background="@color/page_bg_gray"
     tools:context=".NFCScanningActivity">
 
-    <com.cjs.widgets.cjsheadbar.CJSHeadBar
+    <com.cjs.cjsbridge_ui.head.CJSHeadBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showRightIcon="false"

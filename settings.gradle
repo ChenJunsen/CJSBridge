@@ -1,4 +1,7 @@
 rootProject.name='CJSBridge'
 include ':app'
-include ':cjsheadbar'
 include ':cjsnfc'
+include ':cjsbridge-simple'
+include ':cjsbridge-prompt'
+include ':cjsbridge-common'
+include ':cjsbridge-ui'
