@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.alibaba.fastjson.JSONObject;
 import com.cjs.cjsbridge.R;
 import com.cjs.cjsbridge_prompt.web.CJSWebView;
-import com.cjs.widgets.cjsheadbar.CJSHeadBar;
+import com.cjs.cjsbridge_ui.head.CJSHeadBar;
 
 
 /**
