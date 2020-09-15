@@ -1,128 +1,64 @@
 package com.cjs.cjsbridge;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cjs.cjsbridge.tools.UriLogger;
 import com.cjs.cjsbridge.web.CJSWebActivityPrompt;
 import com.cjs.cjsbridge.web.CJSWebActivitySimple;
-import com.cjs.cjsbridge_common.tools.L;
-import com.cjs.cjsbridge_ui.dialog.MsgDialog;
-import com.cjs.sdk.cjsnfc.NFCScanningActivity;
-import com.cjs.sdk.cjsnfc.nt.NfcMainNewActivity;
 
-import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
-    private Button btn_go_to_1,btn_go_to_2;
-    private Button btn_read_nfc;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private Button btn_go_to_simple, btn_go_to_prompt, btn_uri_print;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn_go_to_1 = findViewById(R.id.btn_go_to_1);
-        btn_go_to_2 = findViewById(R.id.btn_go_to_2);
-        btn_read_nfc = findViewById(R.id.btn_read_nfc);
+        btn_go_to_simple = findViewById(R.id.btn_go_to_1);
+        btn_go_to_prompt = findViewById(R.id.btn_go_to_2);
+        btn_uri_print = findViewById(R.id.btn_uri_print);
 
-        btn_go_to_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CJSWebActivitySimple.class);
-                i.putExtra("title", "测试的网页Simple");
-//                i.putExtra("url", "http://www.baidu.com");
-//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
-                i.putExtra("url", "http://172.1.2.62:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));
-//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
-                startActivity(i);
-            }
-        });
-
-        btn_go_to_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CJSWebActivityPrompt.class);
-                i.putExtra("title", "测试的网页Prompt");
-//                i.putExtra("url", "http://www.baidu.com");
-//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
-                i.putExtra("url", "http://172.1.2.62:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));
-//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
-                startActivity(i);
-            }
-        });
-
-        btn_read_nfc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startNFC();
-            }
-        });
+        btn_go_to_simple.setOnClickListener(this);
+        btn_go_to_simple.setOnClickListener(this);
+        btn_uri_print.setOnClickListener(this);
 
 
-        uriTest("ejb0://qq.boom.fest@io:1211/gift/image/total.jpeg?sid=11ff456&ser=F&flag=0019&name=刘昂&msg=今天天气不错");
-        uriTest("https://www.baidu.com:8801/src/view/afc?key=&1168-klio89879");
-        uriTest("msdn://www.baidu.com/src_key=&1168-klio89879");
-
-
-        TextView aId=findViewById(R.id.androidID);
+        TextView aId = findViewById(R.id.androidID);
         aId.setText(Settings.System.getString(
                 getContentResolver(), Settings.Secure.ANDROID_ID));
     }
 
-    private void uriTest(String url) {
-        Uri uri = Uri.parse(url);
-        L.d("URI-PARSE-url", url);
-        L.d("URI-PARSE-scheme", uri.getScheme());
-        L.d("URI-PARSE-host", uri.getHost());
-        L.d("URI-PARSE-auth", uri.getAuthority());
-        L.d("URI-PARSE-auth-encoded", uri.getEncodedAuthority());
-        L.d("URI-PARSE-path", uri.getPath());
-        L.d("URI-PARSE-path-encoded", uri.getEncodedPath());
-        L.d("URI-PARSE-fragment", uri.getFragment());
-        L.d("URI-PARSE-fragment-encoded", uri.getEncodedFragment());
-        L.d("URI-PARSE-port", uri.getPort() + "");
-        L.d("URI-PARSE-query", uri.getQuery());
-        L.d("URI-PARSE-query-encoded", uri.getEncodedQuery());
-        L.d("URI-PARSE-user", uri.getUserInfo());
-        L.d("URI-PARSE-user-encoded", uri.getEncodedUserInfo());
-        L.d("URI-PARSE-spec-part", uri.getSchemeSpecificPart());
-        L.d("URI-PARSE-path-segments", list2String(uri.getPathSegments()));
-    }
-
-    private String list2String(List<String> list) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        if (list != null && list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
-                sb.append(list.get(i));
-                if (i != list.size() - 1) {
-                    sb.append(",");
-                }
-            }
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-
-    private void startNFC() {
-        Intent i = new Intent(this, NfcMainNewActivity.class);
-        startActivityForResult(i, 200);
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 200 && resultCode == NFCScanningActivity.RESULT_CODE_COMPLETE_READ) {
-            MsgDialog.show1(this, "NFC读卡结果:" + (data == null ? "" : data.getStringExtra("result")));
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+    public void onClick(View v) {
+        if (v == btn_go_to_simple) {
+            Intent i = new Intent(MainActivity.this, CJSWebActivitySimple.class);
+            i.putExtra("title", "测试的网页Simple");
+//                i.putExtra("url", "http://www.baidu.com");
+//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
+            i.putExtra("url", "http://192.168.42.2:8080/cjsb/func1.html?h=" + new Random(100).nextInt(88));
+//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
+            startActivity(i);
+        } else if (v == btn_go_to_prompt) {
+            Intent i = new Intent(MainActivity.this, CJSWebActivityPrompt.class);
+            i.putExtra("title", "测试的网页Prompt");
+//                i.putExtra("url", "http://www.baidu.com");
+//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
+            i.putExtra("url", "http://192.168.42.2:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));
+//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
+            startActivity(i);
+        }else if(v==btn_uri_print){
+            UriLogger.print("ejb0://qq.boom.fest@io:1211/gift/image/total.jpeg?sid=11ff456&ser=F&flag=0019&name=刘昂&msg=今天天气不错");
+            UriLogger.print("https://www.baidu.com:8801/src/view/afc?key=&1168-klio89879");
+            UriLogger.print("msdn://www.baidu.com/src_key=&1168-klio89879");
         }
     }
 }
