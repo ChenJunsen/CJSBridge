@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.cjs.cjsbridge.model.Student;
 import com.cjs.cjsbridge_common.tools.L;
 
 /**
@@ -71,5 +72,20 @@ public class CJSInterface {
                 })
                 .create()
                 .show();
+    }
+
+
+    @JavascriptInterface
+    public void printStudentInfo(String params) {
+        if (!TextUtils.isEmpty(params)) {
+            try {
+                JSONObject studentObj = JSON.parseObject(params);
+                Student student = JSON.toJavaObject(studentObj, Student.class);
+                L.d("学生信息打印", student.toString());
+                Toast.makeText(activity, "模拟打印学生信息:" + student, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
