@@ -2,10 +2,8 @@ package com.cjs.cjsbridge;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,13 +25,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_uri_print = findViewById(R.id.btn_uri_print);
 
         btn_go_to_simple.setOnClickListener(this);
-        btn_go_to_simple.setOnClickListener(this);
+        btn_go_to_prompt.setOnClickListener(this);
         btn_uri_print.setOnClickListener(this);
 
-
-        TextView aId = findViewById(R.id.androidID);
-        aId.setText(Settings.System.getString(
-                getContentResolver(), Settings.Secure.ANDROID_ID));
     }
 
 
@@ -42,18 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == btn_go_to_simple) {
             Intent i = new Intent(MainActivity.this, CJSWebActivitySimple.class);
             i.putExtra("title", "测试的网页Simple");
-//                i.putExtra("url", "http://www.baidu.com");
-//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
             i.putExtra("url", "http://192.168.42.2:8080/cjsb/func1.html?h=" + new Random(100).nextInt(88));
-//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
             startActivity(i);
         } else if (v == btn_go_to_prompt) {
             Intent i = new Intent(MainActivity.this, CJSWebActivityPrompt.class);
             i.putExtra("title", "测试的网页Prompt");
-//                i.putExtra("url", "http://www.baidu.com");
-//                i.putExtra("url", "http://192.168.43.108:8080/cjsb/func.html?h="+new Random(99999).nextInt());
-            i.putExtra("url", "http://192.168.42.2:8080/cjsb/func.html?h=" + new Random(100).nextInt(88));
-//                i.putExtra("url","http://zhidao.baidu.com/question/283844212.html");
+            i.putExtra("url", "http://192.168.42.2:8080/cjsb/func2.html?h=" + new Random(100).nextInt(88));
             startActivity(i);
         }else if(v==btn_uri_print){
             UriLogger.print("ejb0://qq.boom.fest@io:1211/gift/image/total.jpeg?sid=11ff456&ser=F&flag=0019&name=刘昂&msg=今天天气不错");
