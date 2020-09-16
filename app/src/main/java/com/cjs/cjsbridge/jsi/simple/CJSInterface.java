@@ -1,4 +1,4 @@
-package com.cjs.cjsbridge.jsi;
+package com.cjs.cjsbridge.jsi.simple;
 
 import android.app.Activity;
 import android.content.DialogInterface;

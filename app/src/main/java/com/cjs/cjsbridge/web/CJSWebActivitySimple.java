@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cjs.cjsbridge.R;
-import com.cjs.cjsbridge.jsi.CJSInterface;
+import com.cjs.cjsbridge.jsi.simple.CJSInterface;
 import com.cjs.cjsbridge_common.tools.L;
 import com.cjs.cjsbridge_simple.web.CJSWebView;
 import com.cjs.cjsbridge_ui.head.CJSHeadBar;

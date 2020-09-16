@@ -1,4 +1,4 @@
-package com.cjs.cjsbridge.jsi;
+package com.cjs.cjsbridge.jsi.prompt;
 
 import android.app.Activity;
 import android.content.DialogInterface;
