@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--防止页面可以被用户放大从而不会出现放大按钮-->
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <title>JSBridge测试页面1</title>
+    <link rel="stylesheet" type="text/css" href="css/func_common.css">
+    <!--关键 引入CJSB库-->
+    <script src="CJSBridge.js"></script>
+    <script>
+        function callNativeToast(params) {
+            CJSBridge.call('CJSBUI', 'toast', {
+                msg: params
+            }, res => {
+                alert(JSON.stringify(res))
+            })
+        }
+
+        function callNativeDialog() {
+            CJSBridge.call('CJSBUI', 'dialog', {
+                title:'呵呵鱼',
+                msg: '你瞅啥？打死你哦！'
+            }, res => {
+                alert(JSON.stringify(res))
+            })
+        }
+    </script>
+</head>
+<body>
+<input type="button" class="btn" value="调用原生Toast" onclick="callNativeToast('天日盐饼干好吃')">
+<input type="button" class="btn" value="调用原生对话框" onclick="callNativeDialog()">
+</body>
+</html>

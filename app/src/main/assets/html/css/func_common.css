@@ -1,0 +1,26 @@
+*, body {
+    padding: 10px;
+    margin: 0;
+}
+
+.btn {
+    border-radius: 50px;
+    height: 45px;
+    border: 2px solid #0c60ee;
+    font-size: 16px;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    outline: none;
+    color: white;
+    background: #ff4cbd;
+    margin-top: 5px;
+}
+
+.btn:active {
+    border-radius: 50px;
+    background: rgba(255, 145, 200, 0.5);
+}
+
+.content {
+    padding: 20px;
+}

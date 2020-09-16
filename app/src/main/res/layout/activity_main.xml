@@ -13,10 +13,20 @@
         android:layout_height="wrap_content"
         android:text="跳转CJSWebActivitySimple"/>
     <Button
+        android:id="@+id/btn_go_to_1_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转CJSWebActivitySimple(加载assets资源)"/>
+    <Button
         android:id="@+id/btn_go_to_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="跳转CJSWebActivityPrompt"/>
+    <Button
+        android:id="@+id/btn_go_to_2_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转CJSWebActivityPrompt(加载assets资源)"/>
     <Button
         android:id="@+id/btn_uri_print"
         android:layout_width="wrap_content"

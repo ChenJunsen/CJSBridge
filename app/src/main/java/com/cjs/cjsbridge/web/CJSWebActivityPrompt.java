@@ -27,7 +27,7 @@ public class CJSWebActivityPrompt extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cjs_web);
+        setContentView(R.layout.activity_cjs_web_prompt);
         headBar = findViewById(R.id.headBar);
         webView = findViewById(R.id.webView);
 

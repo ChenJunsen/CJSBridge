@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--防止页面可以被用户放大从而不会出现放大按钮-->
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <title>JSBridge测试页面1</title>
+    <link rel="stylesheet" type="text/css" href="css/func_common.css">
+    <script>
+        function callNativeToast(params) {
+            javascript:CJSI.toast(JSON.stringify({msg:params}))
+        }
+
+        function callNativePrintStudent() {
+            let student={
+                age:11,
+                name:'TomClancy',
+                gender:1,
+                hobby:'PC games'
+            }
+            javascript:CJSI.printStudentInfo(JSON.stringify(student))
+        }
+    </script>
+</head>
+<body>
+    <input type="button" class="btn" value="调用原生Toast" onclick="callNativeToast('hello')">
+    <input type="button" class="btn" value="调用原生对话框" onclick="callNativePrintStudent()">
+</body>
+</html>

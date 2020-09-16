@@ -28,7 +28,7 @@ public class CJSWebActivitySimple extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cjs_web);
+        setContentView(R.layout.activity_cjs_web_simple);
         headBar = findViewById(R.id.headBar);
         webView = findViewById(R.id.webView);
 
