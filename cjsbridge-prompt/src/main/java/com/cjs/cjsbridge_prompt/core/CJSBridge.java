@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
  */
 public class CJSBridge {
 
-    private static CJSBridge instance;
+    private static volatile CJSBridge instance;
 
     /**
      * 注册的H5插件集合，这里采用安卓独有的数据结构ArrayMap,提升内存使用效率。
