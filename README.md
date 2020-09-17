@@ -16,7 +16,7 @@
 
 ### H5的模板代码和JS代码参考
 ```
-/h5
+app/src/main/assets
 ```
 
 ### WebView和H5交互的方式
@@ -48,6 +48,17 @@
         ....      
     }              
     ```
+* 通过拦截WebViewChromeClient的onPrompt方式实现
+    ChromeClient里面可以重写onAlert,onConfirm和onPrompt三个方法，这三个方法分别对应H5端直接调用alert(),confirm()和
+    prompt()进行对应的对话框显示。每个方法都可以传入一个msg参数，作为对话框的显示的内容。因此，这种实现思想就是先通过H5端调用
+    其中一种，将这个msg传到原生，然后在chromeClient中拦截到这个信息，进行解析，得到需要的指令。
+    虽说三种方法都可以，但是实际不是都可以。从实际使用频率上看，prompt无非是使用最小的。prompt是个能输入的对话框，一般来讲，
+    项目上遇到这种对话框都要重写，因此实用性较低。可以选择prompt入手。
+
+* 通过H5的ifame控件实现
+  这种方式实现的思想和prompt的核心思想是一致的。只不过，msg的传入改为iframe传入。iframe可以理解为H5页面的内嵌浏览器。我们可以在
+  每次请求指令的时候，用js代码生成一个看不见的iframe,通过iframe.src=msg的方式将其传输到原生。原生可以在WebClient的shouldOverrideUrlLoading
+  方法中拦截到这个msg,进行解析，实现相关逻辑。
 
 * 原生调用H5的方法  
   1.核心方法是安卓webView里的
@@ -59,4 +70,8 @@
       }
   });
   ```
-  但是该方法只在api-19以上有效
+  但是该方法只在api-19以上有效,因此通用写法为:
+  ```
+    webView.loadUrl("javascript:具体的js代码")
+  ```
+  二者的区别在于前者有回调，后者没有
