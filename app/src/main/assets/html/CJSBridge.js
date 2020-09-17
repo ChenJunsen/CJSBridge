@@ -80,7 +80,7 @@
      * @param pStr
      */
     function parseParams(pStr) {
-        var params = {}
+        var params = pStr
         try {
             if(typeof pStr === 'string'){
                 params = JSON.parse(pStr)
