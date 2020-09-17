@@ -11,8 +11,6 @@
         function callNativeToast(msg) {
             CJSBridge.call('toast', {
                 msg: msg
-            }, (res) => {
-                alert(JSON.stringify(res))
             })
         }
 

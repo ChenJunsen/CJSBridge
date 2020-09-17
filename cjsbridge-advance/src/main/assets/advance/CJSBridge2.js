@@ -186,6 +186,8 @@
             var callB = unRegisterCall(sid)
             if (typeof callB === 'function') {
                 callB(parseParams(data))
+            }else{
+                L.w('The call back with sid='+sid+' is no longer exist!')
             }
         }
     }

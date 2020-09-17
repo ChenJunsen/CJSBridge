@@ -2,6 +2,8 @@ package com.cjs.cjsbridge;
 
 import android.app.Application;
 
+import com.cjs.cjsbridge.jsi.adv.AdvIOPlugin;
+import com.cjs.cjsbridge.jsi.adv.AdvRemindPlugin;
 import com.cjs.cjsbridge.jsi.adv.AdvUIPlugin;
 import com.cjs.cjsbridge.jsi.prompt.IOPlugin;
 import com.cjs.cjsbridge.jsi.prompt.UIPlugin;
@@ -20,5 +22,7 @@ public class MyApplication extends Application {
 
         //进阶版插件注册
         CJSBridge2.getInstance().addJSInterface(new AdvUIPlugin());
+        CJSBridge2.getInstance().addJSInterface(new AdvIOPlugin());
+        CJSBridge2.getInstance().addJSInterface(new AdvRemindPlugin());
     }
 }

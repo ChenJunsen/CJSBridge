@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import com.cjs.cjsbridge.tools.UriLogger;
 import com.cjs.cjsbridge.web.CJSWebActivityAdvanced;
 import com.cjs.cjsbridge.web.CJSWebActivityPrompt;
 import com.cjs.cjsbridge.web.CJSWebActivitySimple;
+import com.cjs.cjsbridge_ui.toast.TopToast;
 
 import java.util.Random;
 
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_go_to_simple_local.setOnClickListener(this);
         btn_go_to_adv_local.setOnClickListener(this);
 
+
+        TopToast.showToast(this,"hello", Toast.LENGTH_LONG);
     }
 
 

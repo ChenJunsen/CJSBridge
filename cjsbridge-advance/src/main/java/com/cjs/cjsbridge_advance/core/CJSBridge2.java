@@ -108,9 +108,12 @@ public class CJSBridge2 {
                             boolean isIntercept = h5plugin.interceptAction(webView, methodName, jsonP, callBack);
                             //将具体的执行操作分发到具体插件里面
                             h5plugin.dispatchAction(webView, methodName, jsonP, callBack);
+                            String fmt0 = "分发指令[%1$s]--->[%2$s]";
+                            L.d(String.format(fmt0, h5plugin.getClass().getName(), methodName));
                             if (isIntercept) {
                                 //如果需要拦截，那么之后的所有插件里面的同名方法都不会走了
-                                L.d(methodName + "在" + h5plugin.getClass().getName() + "中被拦截了");
+                                String fmt = "[%1$s]在<%2$s>中被拦截了";
+                                L.d(String.format(fmt, methodName, h5plugin.getClass().getName()));
                                 break;
                             }
                         } catch (Exception e) {

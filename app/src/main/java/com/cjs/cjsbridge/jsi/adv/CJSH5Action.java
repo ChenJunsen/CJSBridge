@@ -10,4 +10,6 @@ public class CJSH5Action {
     public static final String TOAST="toast";
     public static final String DIALOG="dialog";
     public static final String TAKE_PHOTO="takePhoto";
+    public static final String SET_STORAGE="setStorage";
+    public static final String GET_STORAGE="getStorage";
 }
