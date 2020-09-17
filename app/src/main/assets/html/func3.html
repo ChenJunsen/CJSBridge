@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--防止页面可以被用户放大从而不会出现放大按钮-->
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <title>JSBridge测试页面3</title>
+    <link rel="stylesheet" type="text/css" href="css/func_common.css">
+    <script>
+        function callNativeToast(msg) {
+            CJSBridge.call('toast', {
+                msg: msg
+            }, (res) => {
+                alert(JSON.stringify(res))
+            })
+        }
+
+        function callNativeDialog() {
+            CJSBridge.call('dialog', {
+                title: '哗啦啦',
+                msg: 'I have a breakfast',
+                submitText: '吃过了',
+                cancelText: '还没吃',
+                buttons: 2
+            }, res => {
+                if(res.params){
+                    if (res.params.click === 'submit') {
+                        alert('点击了‘吃过了’')
+                    } else if (res.params.click === 'cancel') {
+                        alert('点击了‘还没吃’')
+                    }
+                }
+            })
+        }
+
+        function callError() {
+            CJSBridge.call('err', {}, res => {
+                alert(JSON.stringify(res))
+            })
+        }
+    </script>
+</head>
+<body>
+<input type="button" class="btn" value="调用原生Toast" onclick="callNativeToast('进阶版JSBridge')">
+<input type="button" class="btn" value="调用原生对话框" onclick="callNativeDialog()">
+<input type="button" class="btn" value="错误引用示范" onclick="callError()">
+</body>
+</html>

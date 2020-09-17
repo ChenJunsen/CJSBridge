@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cjs.cjsbridge.tools.UriLogger;
+import com.cjs.cjsbridge.web.CJSWebActivityAdvanced;
 import com.cjs.cjsbridge.web.CJSWebActivityPrompt;
 import com.cjs.cjsbridge.web.CJSWebActivitySimple;
 
@@ -16,6 +17,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_go_to_simple, btn_go_to_prompt, btn_uri_print;
     private Button btn_go_to_simple_local, btn_go_to_prompt_local;
+    private Button btn_go_to_adv_local;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +28,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_uri_print = findViewById(R.id.btn_uri_print);
         btn_go_to_simple_local = findViewById(R.id.btn_go_to_1_local);
         btn_go_to_prompt_local = findViewById(R.id.btn_go_to_2_local);
+        btn_go_to_adv_local=findViewById(R.id.btn_go_to_3_local);
 
         btn_go_to_simple.setOnClickListener(this);
         btn_go_to_prompt.setOnClickListener(this);
         btn_uri_print.setOnClickListener(this);
         btn_go_to_prompt_local.setOnClickListener(this);
         btn_go_to_simple_local.setOnClickListener(this);
+        btn_go_to_adv_local.setOnClickListener(this);
 
     }
 
@@ -61,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(MainActivity.this, CJSWebActivityPrompt.class);
             i.putExtra("title", "测试的网页Prompt");
             i.putExtra("url", "file:///android_asset/html/func2.html");
+            startActivity(i);
+        }else if(v == btn_go_to_adv_local){
+            Intent i = new Intent(MainActivity.this, CJSWebActivityAdvanced.class);
+            i.putExtra("title", "测试的网页Advanced");
+            i.putExtra("url", "file:///android_asset/html/func3.html");
             startActivity(i);
         }
     }

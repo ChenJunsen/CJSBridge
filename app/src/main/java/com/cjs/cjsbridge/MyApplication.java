@@ -18,6 +18,7 @@ public class MyApplication extends Application {
         CJSBridge.getInstance().addJSInterface("CJSBIO", IOPlugin.class);
 
 
+        //进阶版插件注册
         CJSBridge2.getInstance().addJSInterface(new AdvUIPlugin());
     }
 }

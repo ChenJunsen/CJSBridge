@@ -83,7 +83,7 @@ public class UIPlugin implements CJSBH5Plugin {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             JSONObject jsonObject=new JSONObject();
-                            jsonObject.put("click","submit");
+                            jsonObject.put("click","cancel");
                             callBack.apply(true,jsonObject);
                         }
                     }

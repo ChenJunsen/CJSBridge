@@ -58,15 +58,15 @@ public class CJSBCallBack {
             return;
         }
         JSONObject callBackParams = new JSONObject();
-        if (params == null) {
-            params = new JSONObject();
-        }
         if (TextUtils.isEmpty(message)) {
             message = isSuccess ? "成功" : "失败";
         }
-        callBackParams.put("params", params);
+        if(params!=null){
+            callBackParams.put("params", params);
+        }
         callBackParams.put("cjsb_status", isSuccess ? STATUS_OK : STATUS_FAIL);
         callBackParams.put("cjsb_msg", message);
+        callBackParams.put("cjsb_sid", sid);
 
         String callBackStr = callBackParams.toJSONString();
         L.d("callBack", "原生回调H5-->SID:" + sid + "     callBackParams:" + callBackStr);
