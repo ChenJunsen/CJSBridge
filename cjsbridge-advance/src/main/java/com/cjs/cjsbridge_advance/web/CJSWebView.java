@@ -13,6 +13,7 @@ import com.cjs.cjsbridge_advance.core.CJSBridge2;
 import com.cjs.cjsbridge_advance.core.exception.CJSBException;
 import com.cjs.cjsbridge_advance.dispatch.CJSActionDispatcher;
 import com.cjs.cjsbridge_common.scheme.CJScheme;
+import com.cjs.cjsbridge_common.tools.SystemUtil;
 
 /**
  * 进阶版WebView
@@ -56,6 +57,9 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
         webViewClient.setCjsActionDispatcher(this);
         setWebViewClient(webViewClient);
         setWebChromeClient(new CJSWebChromeClient((Activity) context));
+        //可选操作 增加设备UA，方便H5判断当前设备型号
+        String uaStr = webSettings.getUserAgentString();
+        webSettings.setUserAgentString(uaStr + "/" + SystemUtil.getSystemModel());
     }
 
 

@@ -13,15 +13,15 @@ import androidx.annotation.RequiresApi;
 import com.alibaba.fastjson.JSONObject;
 import com.cjs.cjsbridge_common.scheme.CJScheme;
 import com.cjs.cjsbridge_common.tools.L;
+import com.cjs.cjsbridge_common.tools.SystemUtil;
 import com.cjs.cjsbridge_prompt.core.CJSBridge;
 import com.cjs.cjsbridge_prompt.core.exception.CJSBException;
 import com.cjs.cjsbridge_prompt.dispatch.CJSActionDispatcher;
 
 
-
-
 /**
  * 自定义WebView 重写onJsPrompt版
+ *
  * @author JasonChen
  * @email chenjunsen@outlook.com
  * @createTime 2020/8/31 0031 15:26
@@ -75,10 +75,14 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
             setWebContentsDebuggingEnabled(true);//开启内嵌日志调试工具
         }*/
 
-        cjsWebChromeClient=new CJSWebChromeClient((Activity) getContext());
+        cjsWebChromeClient = new CJSWebChromeClient((Activity) getContext());
         cjsWebChromeClient.setCjsActionDispatcher(this);
         setWebViewClient(new CJSWebClient((Activity) getContext()));
         setWebChromeClient(cjsWebChromeClient);
+
+        //可选操作 增加设备UA，方便H5判断当前设备型号
+        String uaStr = webSettings.getUserAgentString();
+        webSettings.setUserAgentString(uaStr + "/" + SystemUtil.getSystemModel());
     }
 
     /**
@@ -97,6 +101,7 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
 
     /**
      * 分发处理接收到的H5指令和参数
+     *
      * @param webView
      * @param cjScheme
      */

@@ -55,6 +55,8 @@
         }
     }
 
+    L.i('WebView ua is:' + navigator.userAgent)
+
     var sidSeed = 1//指令ID的种子，逐渐递增
     var callBacks = {}//回调集合
     var CJSBridge = window.CJSBridge || (window.CJSBridge = {})//初始化桥实体
@@ -158,7 +160,7 @@
     }
 
     function callNative(methodName, params, sid) {
-        var url = CJSB_BRIDGE_SCHEME + "://"+CJSB_BRIDGE_NAME+":" + sid + '/' + methodName + '?params=' + generateParams(params)
+        var url = CJSB_BRIDGE_SCHEME + "://" + CJSB_BRIDGE_NAME + ":" + sid + '/' + methodName + '?params=' + generateParams(params)
         //核心 -------->真正传输给原生数据的入口<------
         L.d("H5 call native url:" + url)
         iframeCall(url)
@@ -167,12 +169,12 @@
     function iframeCall(url) {
         //创建一个看不见的iframe,用于传输url给原生
         var iframe = document.createElement('iframe')
-        iframe.src=url
+        iframe.src = url
         iframe.style.display = 'none'
         document.documentElement.appendChild(iframe)
-        setTimeout(()=>{
+        setTimeout(() => {
             document.documentElement.removeChild(iframe)
-        },0)
+        }, 0)
     }
 
     //设置桥实体
@@ -186,8 +188,8 @@
             var callB = unRegisterCall(sid)
             if (typeof callB === 'function') {
                 callB(parseParams(data))
-            }else{
-                L.w('The call back with sid='+sid+' is no longer exist!')
+            } else {
+                L.w('The call back with sid=' + sid + ' is no longer exist!')
             }
         }
     }
