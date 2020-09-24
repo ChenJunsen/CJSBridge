@@ -1,5 +1,8 @@
 package com.cjs.cjsbridge_advance.core;
 
+import android.os.Build;
+import android.text.TextUtils;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import androidx.collection.ArraySet;
@@ -49,6 +52,8 @@ public class CJSBridge2 {
     private CJSBridge2() {
         //初始化插件集合
         injectedPlugins = new ArraySet<>();
+        //注入内置插件
+        addJSInterface(new CJSBInnerPlugin());
     }
 
     /**
@@ -129,5 +134,102 @@ public class CJSBridge2 {
         } else {
             L.e("调用H5插件失败，还没有注册插件，请先调用addJSInterface方法初始化插件");
         }
+    }
+
+    /**
+     * 调用H5脚本监听器
+     *
+     * @author JasonChen
+     * @email chenjunsen@outlook.com
+     * @createTime 2020/9/24 0024 16:34
+     */
+    public interface CallH5CallBack {
+        /**
+         * 脚本执行完的回调
+         *
+         * @param value
+         */
+        void onExecutedJavascript(String value);
+    }
+
+    /**
+     * 原生调用H5方法
+     *
+     * @param webView
+     * @param js       需要执行的JS脚本
+     * @param callBack 执行回调
+     * @throws CJSBException
+     */
+    public static void callH5(WebView webView, String js, final CallH5CallBack callBack) throws CJSBException {
+        if (TextUtils.isEmpty(js)) {
+            L.d("callH5执行脚本:" + js);
+            throw new CJSBException("执行H5的JS脚本不能为空");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.evaluateJavascript(js, new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if (callBack != null) {
+                        callBack.onExecutedJavascript(value);
+                    }
+                }
+            });
+        } else {
+            webView.loadUrl("javascript:" + js);
+        }
+    }
+
+    /**
+     * 原生调用H5方法
+     *
+     * @param webView
+     * @param js      需要执行的JS脚本
+     * @throws CJSBException
+     */
+    public static void callH5(WebView webView, String js) throws CJSBException {
+        callH5(webView, js, null);
+    }
+
+    /**
+     * 注册自定义事件
+     *
+     * @param webView
+     * @param eventName 事件名字
+     */
+    public static void addEventListener(WebView webView, String eventName) {
+        L.d("addEvent", "添加事件监听器:" + eventName);
+        String fmt = "CJSBridge.registerEvent(%1$s)";
+        try {
+            callH5(webView, String.format(fmt, eventName));
+        } catch (CJSBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 触发自定义事件
+     *
+     * @param webView
+     * @param eventName 事件名字
+     * @param params
+     */
+    public static void triggerEvent(WebView webView, String eventName, JSONObject params) {
+        L.d("triggerEvent", "触发事件监听器:" + eventName);
+        String fmt = "CJSBridge.triggerEvent(%1$s,%2$s)";
+        try {
+            callH5(webView, String.format(fmt, eventName, params));
+        } catch (CJSBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 触发自定义事件
+     *
+     * @param webView
+     * @param eventName 事件名字
+     */
+    public static void triggerEvent(WebView webView, String eventName) {
+        triggerEvent(webView, eventName, null);
     }
 }

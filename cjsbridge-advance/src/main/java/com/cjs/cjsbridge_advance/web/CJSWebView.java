@@ -13,10 +13,12 @@ import com.cjs.cjsbridge_advance.core.CJSBridge2;
 import com.cjs.cjsbridge_advance.core.exception.CJSBException;
 import com.cjs.cjsbridge_advance.dispatch.CJSActionDispatcher;
 import com.cjs.cjsbridge_common.scheme.CJScheme;
+import com.cjs.cjsbridge_common.tools.L;
 import com.cjs.cjsbridge_common.tools.SystemUtil;
 
 /**
  * 进阶版WebView
+ *
  * @author JasonChen
  * @email chenjunsen@outlook.com
  * @createTime 2020/9/16 0016 17:59
@@ -49,6 +51,12 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
         init(context);
     }
 
+    private WebViewInitListener webViewInitListener;
+
+    public void setWebViewInitListener(WebViewInitListener webViewInitListener) {
+        this.webViewInitListener = webViewInitListener;
+    }
+
     private void init(Context context) {
         WebSettings webSettings = getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -64,11 +72,44 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
 
 
     @Override
+    public void onPageStarted(WebView webView, String url) {
+
+    }
+
+    @Override
+    public void onJSBridgeInitialized(WebView webView) {
+        L.i("init", "CJSBridge注入成功");
+        if(webViewInitListener!=null){
+            webViewInitListener.onWebViewBridgeInitialized(webView);
+        }
+    }
+
+
+    @Override
     public void dispatchH5Action(WebView webView, CJScheme cjScheme) {
         try {
             CJSBridge2.getInstance().callNative(webView, cjScheme);
         } catch (CJSBException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onPageFinished(WebView webView, String url) {
+
+    }
+
+    /**
+     * CJSWebView监听器
+     * @author JasonChen
+     * @email chenjunsen@outlook.com
+     * @createTime 2020/9/24 0024 18:03
+     */
+    public interface WebViewInitListener{
+        /**
+         * JS桥初始化完成的时候
+         * @param webView
+         */
+        void onWebViewBridgeInitialized(WebView webView);
     }
 }

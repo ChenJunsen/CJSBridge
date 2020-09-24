@@ -26,13 +26,13 @@
     const CJSB_BRIDGE_NAME = 'cjsbridge'
     const CJSB_CALL_BACK_PREFIX = 'cjsb_callBack_'
     const CJSB_TAG_PREFIX = '[CJSB]'
-    var enbale_cjsb_log = true
+    let enbale_cjsb_log = true
 
     /**
      * 日志工具类
      * @type {{d: d, e: e, w: w}}
      */
-    var L = {
+    let L = {
         e: function (msg) {
             if (enbale_cjsb_log) {
                 console.error(CJSB_TAG_PREFIX + msg)
@@ -57,14 +57,16 @@
 
     L.i('WebView ua is:' + navigator.userAgent)
 
-    var sidSeed = 1//指令ID的种子，逐渐递增
-    var callBacks = {}//回调集合
-    var CJSBridge = window.CJSBridge || (window.CJSBridge = {})//初始化桥实体
+    let sidSeed = 1//指令ID的种子，逐渐递增
+    let callBacks = {}//回调集合
+    let CJSBridge = window.CJSBridge || (window.CJSBridge = {})//初始化桥实体
     //上面的表达式可以翻译为下面这句话
     /*if(!window.CJSBridge){
         window.CJSBridge={}
     }
-    var CJSBridge=window.CJSBridge*/
+    let CJSBridge=window.CJSBridge*/
+    let events = {}//自定义事件集合
+
 
     /**
      * 生成转换原生可接受的参数
@@ -84,7 +86,7 @@
      * @param pStr
      */
     function parseParams(pStr) {
-        var params = pStr
+        let params = pStr
         try {
             if (typeof pStr === 'string') {
                 params = JSON.parse(pStr)
@@ -149,8 +151,8 @@
      */
     function unRegisterCall(sid) {
         if (sid) {
-            var callBackId = CJSB_CALL_BACK_PREFIX + sid
-            var call = callBacks[callBackId]
+            let callBackId = CJSB_CALL_BACK_PREFIX + sid
+            let call = callBacks[callBackId]
             delete callBacks[callBackId]
             return call
         } else {
@@ -160,7 +162,7 @@
     }
 
     function callNative(methodName, params, sid) {
-        var url = CJSB_BRIDGE_SCHEME + "://" + CJSB_BRIDGE_NAME + ":" + sid + '/' + methodName + '?params=' + generateParams(params)
+        let url = CJSB_BRIDGE_SCHEME + "://" + CJSB_BRIDGE_NAME + ":" + sid + '/' + methodName + '?params=' + generateParams(params)
         //核心 -------->真正传输给原生数据的入口<------
         L.d("H5 call native url:" + url)
         iframeCall(url)
@@ -168,7 +170,7 @@
 
     function iframeCall(url) {
         //创建一个看不见的iframe,用于传输url给原生
-        var iframe = document.createElement('iframe')
+        let iframe = document.createElement('iframe')
         iframe.src = url
         iframe.style.display = 'none'
         document.documentElement.appendChild(iframe)
@@ -177,29 +179,103 @@
         }, 0)
     }
 
+    /**
+     * 注册自定义事件
+     * @param evName 事件名字
+     * @param params 事件所要携带的参数
+     * @param cancancel 事件是否能取消
+     * @param canBubble 事件是否能冒泡
+     */
+    function registerEvent(evName, params, cancancel, canBubble) {
+        if (evName && typeof evName === 'string') {
+
+            let p = {};
+            if (typeof p === 'string') {
+                try {
+                    p = JSON.parse(params);
+                } catch (e) {
+                    L.w('convert event params failed!')
+                }
+            }
+            let event = new CustomEvent(evName, {
+                detail: p || {},
+                cancelable: cancancel,
+                bubbles: canBubble
+            })
+            events[evName] = event
+        } else {
+            L.e('Register event failed! Invalid event name：' + evName);
+        }
+    }
+
+    /**
+     * 注销自定义事件
+     * @param evName 事件名字
+     */
+    function unRegisterEvent(evName) {
+        if (evName) {
+            delete events[evName]
+        } else {
+            L.e('UnRegister event failed! Invalid event name：' + evName);
+        }
+    }
+
+    /**
+     * 触发自定义事件
+     * @param evName 事件名字
+     */
+    function triggerEvent(evName) {
+        if (evName) {
+            document.dispatchEvent(events[evName])
+        } else {
+            L.e('trigger event failed! Invalid event name：' + evName);
+        }
+    }
+
     //设置桥实体
-    var core = {
+    let core = {
         call: function (methodName, params, callBack) {
-            var sid = generateSID()
+            let sid = generateSID()
             registerCall(sid, callBack)
             callNative(methodName, params, sid)
         },
         callBack: function (sid, data) {
-            var callB = unRegisterCall(sid)
+            let callB = unRegisterCall(sid)
             if (typeof callB === 'function') {
                 callB(parseParams(data))
             } else {
                 L.w('The call back with sid=' + sid + ' is no longer exist!')
             }
+        },
+        registerEvent: function (evName, params, cancancel, canBubble) {
+            registerEvent(evName, params, cancancel, canBubble)
+        },
+        triggerEvent: function (evName) {
+            triggerEvent(evName)
         }
     }
 
     //拷贝core里面的属性进入桥
-    for (var key in core) {
+    for (let key in core) {
         if (!hasOwnProperty(CJSBridge, key)) {
             CJSBridge[key] = core[key]
         }
     }
 
     L.i('CJSBridge2注入完毕')
+    CJSBridge.call('cjsb_init')
 }())
+
+function CJSBReady(readyCallback) {
+    function ready(callback) {
+        // 如果 jsbridge 已经注入则直接调用
+        if (window.CJSBridge) {
+            callback && callback();
+        } else {
+            // 如果没有注入则监听注入的事件
+            document.addEventListener('CJSBridgeReady', callback, false);
+        }
+    }
+
+    ready(readyCallback);
+}

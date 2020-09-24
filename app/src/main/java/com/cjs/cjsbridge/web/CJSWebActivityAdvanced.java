@@ -3,19 +3,23 @@ package com.cjs.cjsbridge.web;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cjs.cjsbridge.R;
+import com.cjs.cjsbridge_advance.core.CJSBridge2;
 import com.cjs.cjsbridge_advance.web.CJSWebView;
 import com.cjs.cjsbridge_ui.head.CJSHeadBar;
 
-public class CJSWebActivityAdvanced extends AppCompatActivity {
+public class CJSWebActivityAdvanced extends AppCompatActivity implements CJSWebView.WebViewInitListener {
 
     private CJSHeadBar headBar;//标题栏
     private CJSWebView webView;//Web容器
+
+    private boolean isCreated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class CJSWebActivityAdvanced extends AppCompatActivity {
         headBar.setOnBackClickListener(new CJSHeadBar.OnBackClickListener() {
             @Override
             public void onBackClick(View v) {
+                CJSBridge2.triggerEvent(webView, "back");
                 if (webView != null && webView.canGoBack()) {
                     webView.goBack();
                 } else {
@@ -52,20 +57,24 @@ public class CJSWebActivityAdvanced extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onWebViewBridgeInitialized(WebView webView) {
+        CJSBridge2.addEventListener(webView, "resume");
+        CJSBridge2.addEventListener(webView, "back");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(webView!=null){
-            JSONObject params=new JSONObject();
-            params.put("msg","原生页面唤醒");
-            /*webView.evaluateJavascript("consoleErr", params, new ValueCallback() {
-                @Override
-                public void onReceiveValue(Object value) {
-
-                }
-            });*/
+        if (webView != null && !isCreated) {
+            isCreated = true;
+            JSONObject params = new JSONObject();
+            params.put("action", "resume");
+            CJSBridge2.triggerEvent(webView, "resume", params);
         }
     }
+
 }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.webkit.WebView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cjs.cjsbridge_advance.core.exception.CJSBException;
 import com.cjs.cjsbridge_common.tools.L;
 
 import java.lang.ref.WeakReference;
@@ -72,10 +73,11 @@ public class CJSBCallBack {
         L.d("callBack", "原生回调H5-->SID:" + sid + "     callBackParams:" + callBackStr);
         String url = String.format(CALL_BACK_STRING, sid, callBackStr);
         L.d("callBack", "原生回调H5-->执行脚本:" + url);
-        webView.loadUrl(url);
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(url,null);
-        }*/
+        try {
+            CJSBridge2.callH5(webView,url);
+        } catch (CJSBException e) {
+            e.printStackTrace();
+        }
     }
 
     public void apply(boolean isSuccess, JSONObject params) {

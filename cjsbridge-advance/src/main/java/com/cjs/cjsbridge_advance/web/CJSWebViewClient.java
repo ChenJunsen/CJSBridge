@@ -1,12 +1,12 @@
 package com.cjs.cjsbridge_advance.web;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.text.TextUtils;
-import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.cjs.cjsbridge_advance.core.CJSBridge2;
+import com.cjs.cjsbridge_advance.core.exception.CJSBException;
 import com.cjs.cjsbridge_advance.dispatch.CJSActionDispatcher;
 import com.cjs.cjsbridge_common.scheme.CJScheme;
 import com.cjs.cjsbridge_common.scheme.CJSchemeParser;
@@ -61,20 +61,25 @@ public class CJSWebViewClient extends WebViewClient {
             executeJavascript(view, js);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (CJSBException e) {
+            e.printStackTrace();
         }
         super.onPageStarted(view, url, favicon);
+        if(cjsActionDispatcher!=null){
+            cjsActionDispatcher.onPageStarted(view,url);
+        }
     }
 
-    private void executeJavascript(WebView webView, String js) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(js, new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-
-                }
-            });
-        } else {
-            webView.loadUrl("javascript:" + js);
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        if(cjsActionDispatcher!=null){
+            cjsActionDispatcher.onPageFinished(view, url);
         }
+    }
+
+
+    private void executeJavascript(WebView webView, String js) throws CJSBException {
+        CJSBridge2.callH5(webView, js);
     }
 }
