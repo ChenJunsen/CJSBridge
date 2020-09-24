@@ -33,6 +33,11 @@
         android:layout_height="wrap_content"
         android:text="跳转CJSWebActivityAdvance(加载assets资源)"/>
     <Button
+        android:id="@+id/btn_go_to_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转z-demo4"/>
+    <Button
         android:id="@+id/btn_uri_print"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

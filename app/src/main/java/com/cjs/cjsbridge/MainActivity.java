@@ -19,6 +19,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_go_to_simple, btn_go_to_prompt, btn_uri_print;
     private Button btn_go_to_simple_local, btn_go_to_prompt_local;
+    private Button btn_go_to_4;
     private Button btn_go_to_adv_local;
 
     @Override
@@ -30,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_uri_print = findViewById(R.id.btn_uri_print);
         btn_go_to_simple_local = findViewById(R.id.btn_go_to_1_local);
         btn_go_to_prompt_local = findViewById(R.id.btn_go_to_2_local);
-        btn_go_to_adv_local=findViewById(R.id.btn_go_to_3_local);
+        btn_go_to_adv_local = findViewById(R.id.btn_go_to_3_local);
+        btn_go_to_4 = findViewById(R.id.btn_go_to_4);
 
         btn_go_to_simple.setOnClickListener(this);
         btn_go_to_prompt.setOnClickListener(this);
@@ -38,9 +40,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_go_to_prompt_local.setOnClickListener(this);
         btn_go_to_simple_local.setOnClickListener(this);
         btn_go_to_adv_local.setOnClickListener(this);
+        btn_go_to_4.setOnClickListener(this);
 
 
-        TopToast.showToast(this,"hello", Toast.LENGTH_LONG);
+        TopToast.showToast(this, "hello", Toast.LENGTH_LONG);
     }
 
 
@@ -70,10 +73,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             i.putExtra("title", "测试的网页Prompt");
             i.putExtra("url", "file:///android_asset/html/func2.html");
             startActivity(i);
-        }else if(v == btn_go_to_adv_local){
+        } else if (v == btn_go_to_adv_local) {
             Intent i = new Intent(MainActivity.this, CJSWebActivityAdvanced.class);
             i.putExtra("title", "测试的网页Advanced");
             i.putExtra("url", "file:///android_asset/html/func3.html");
+            startActivity(i);
+        } else if(v == btn_go_to_4){
+            Intent i = new Intent(MainActivity.this, CJSWebActivityAdvanced.class);
+            i.putExtra("title", "z-demo4");
+            i.putExtra("url", "http://192.168.43.108:8080/z-demo4.html");
             startActivity(i);
         }
     }
