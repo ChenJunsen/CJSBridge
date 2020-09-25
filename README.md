@@ -75,3 +75,48 @@ app/src/main/assets
     webView.loadUrl("javascript:具体的js代码")
   ```
   二者的区别在于前者有回调，后者没有
+
+* JS自定义事件的实现
+  1.核心是JS里面通过CustomEvent来创建自定义事件
+  ```
+  //创建一个自定义事件，名字叫xxx
+  var ev=new CustomEvent('xxx',{
+    detail:{},//该事件初始化的一些参数(方法)可以写在这里面，detail的名字不能变
+    cancelable:true,//事件能否取消
+    bubbles:true    //事件能否冒泡传递
+  })
+  
+  //设置xxx事件埋点
+  //target是事件需要由哪个对象触发，在CJSB里，是document
+  target.addEventListener('xxx',function(ev){
+    //这里的ev就是上面我们创建的ev
+    ev.detail.  //这里可以取到事件参数
+  })
+  
+  //触发事件
+  target.dispatchEvent(ev)
+  ```
+  2.原生模块可以在JSBridge挂载完毕后，进行初始化。
+  具体步骤是已原生调用H5方法的形式，在JS挂载完成的时候进行事件注册:
+  ```
+    @Override
+    public void onWebViewBridgeInitialized(WebView webView) {
+        //注册事件
+        CJSBridge2.addEventListener(webView, "resume");
+        CJSBridge2.addEventListener(webView, "back");
+    }
+  ```
+  然后在原生事件触发时，再调用H5代码触发JS的事件，例如，WebViewActivity的Resume事件:
+  ```
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (webView != null && isCreated) {
+            JSONObject params = new JSONObject();
+            params.put("action", "resume");
+            //原生页面唤醒时，告知H5页面唤醒
+            CJSBridge2.triggerEvent(webView, "resume", params);
+        }
+        isCreated=true;
+    }
+  ```
