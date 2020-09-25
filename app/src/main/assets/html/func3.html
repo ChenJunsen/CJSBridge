@@ -40,6 +40,7 @@
             })
         }
 
+        //'resume'是自定义的一个JS事件，在原生页面唤醒的时候会触发
         document.addEventListener('resume',res=>{
             //这里的res是个CustomEvent的对象，而非普通对象，因此用JSON.stringify打印看不到全部信息
             //所有的携带参数放在detail这个内置对象里面，这个可以用JSON打印
