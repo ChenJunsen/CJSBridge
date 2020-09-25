@@ -11,6 +11,8 @@
         function callNativeToast(msg) {
             CJSBridge.call('toast', {
                 msg: msg
+            }, (res) => {
+                console.log('h5收到了来自调用原生Toast的回调:'+JSON.stringify(res))
             })
         }
 
@@ -37,6 +39,15 @@
                 alert(JSON.stringify(res))
             })
         }
+
+        document.addEventListener('resume',res=>{
+            //这里的res是个CustomEvent的对象，而非普通对象，因此用JSON.stringify打印看不到全部信息
+            //所有的携带参数放在detail这个内置对象里面，这个可以用JSON打印
+            console.log('resume--------------：'+JSON.stringify(res.detail))
+            CJSBridge.call('toast',{
+                msg:'唤醒了:'+JSON.stringify(res.detail)
+            })
+        })
     </script>
 </head>
 <body>

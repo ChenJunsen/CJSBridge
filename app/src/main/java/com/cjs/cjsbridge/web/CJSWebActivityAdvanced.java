@@ -58,10 +58,13 @@ public class CJSWebActivityAdvanced extends AppCompatActivity implements CJSWebV
             }
         });
 
+        webView.setWebViewInitListener(this);
+
     }
 
     @Override
     public void onWebViewBridgeInitialized(WebView webView) {
+        //注册事件
         CJSBridge2.addEventListener(webView, "resume");
         CJSBridge2.addEventListener(webView, "back");
     }
@@ -69,12 +72,13 @@ public class CJSWebActivityAdvanced extends AppCompatActivity implements CJSWebV
     @Override
     protected void onResume() {
         super.onResume();
-        if (webView != null && !isCreated) {
-            isCreated = true;
+        if (webView != null && isCreated) {
             JSONObject params = new JSONObject();
             params.put("action", "resume");
+            //原生页面唤醒时，告知H5页面唤醒
             CJSBridge2.triggerEvent(webView, "resume", params);
         }
+        isCreated=true;
     }
 
 }

@@ -68,6 +68,17 @@ public class CJSWebView extends WebView implements CJSActionDispatcher {
         //可选操作 增加设备UA，方便H5判断当前设备型号
         String uaStr = webSettings.getUserAgentString();
         webSettings.setUserAgentString(uaStr + "/" + SystemUtil.getSystemModel());
+
+       /* new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    CJSBridge2.callH5(CJSWebView.this,"CJSBridge.registerEvent(resume)");
+                } catch (CJSBException e) {
+                    e.printStackTrace();
+                }
+            }
+        },3000);*/
     }
 
 

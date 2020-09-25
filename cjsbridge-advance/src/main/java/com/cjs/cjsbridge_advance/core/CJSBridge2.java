@@ -161,8 +161,8 @@ public class CJSBridge2 {
      * @throws CJSBException
      */
     public static void callH5(WebView webView, String js, final CallH5CallBack callBack) throws CJSBException {
+        L.d("callH5执行脚本:" + js);
         if (TextUtils.isEmpty(js)) {
-            L.d("callH5执行脚本:" + js);
             throw new CJSBException("执行H5的JS脚本不能为空");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -198,7 +198,8 @@ public class CJSBridge2 {
      */
     public static void addEventListener(WebView webView, String eventName) {
         L.d("addEvent", "添加事件监听器:" + eventName);
-        String fmt = "CJSBridge.registerEvent(%1$s)";
+        //关键点 字符串模板时，第一个事件名字是个字符串，需要加引号，否则会被识别为对象
+        String fmt = "CJSBridge.registerEvent('%1$s')";
         try {
             callH5(webView, String.format(fmt, eventName));
         } catch (CJSBException e) {
@@ -215,9 +216,10 @@ public class CJSBridge2 {
      */
     public static void triggerEvent(WebView webView, String eventName, JSONObject params) {
         L.d("triggerEvent", "触发事件监听器:" + eventName);
-        String fmt = "CJSBridge.triggerEvent(%1$s,%2$s)";
+        //关键点 字符串模板时，第一个事件名字是个字符串，需要加引号，否则会被识别为对象
+        String fmt = "CJSBridge.triggerEvent('%1$s',%2$s)";
         try {
-            callH5(webView, String.format(fmt, eventName, params));
+            callH5(webView, String.format(fmt, eventName,params));
         } catch (CJSBException e) {
             e.printStackTrace();
         }

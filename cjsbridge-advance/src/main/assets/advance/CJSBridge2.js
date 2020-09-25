@@ -137,7 +137,7 @@
                 callBacks[CJSB_CALL_BACK_PREFIX + sid] = callBack
             } else {
                 callBacks[CJSB_CALL_BACK_PREFIX + sid] = null
-                L.i('register call is not a function,that means there is no callback for this method')
+                L.i('register callback is not a function,that means there is no callback for the method with sid:' + sid)
             }
         } else {
             L.e('invalid register call sid!')
@@ -187,18 +187,20 @@
      * @param canBubble 事件是否能冒泡
      */
     function registerEvent(evName, params, cancancel, canBubble) {
+        L.d('Register event：' + evName)
         if (evName && typeof evName === 'string') {
-
             let p = {};
-            if (typeof p === 'string') {
+            if (typeof params === 'string') {
                 try {
                     p = JSON.parse(params);
                 } catch (e) {
                     L.w('convert event params failed!')
                 }
+            } else {
+                p = params || {}
             }
             let event = new CustomEvent(evName, {
-                detail: p || {},
+                detail: p,
                 cancelable: cancancel,
                 bubbles: canBubble
             })
@@ -213,6 +215,7 @@
      * @param evName 事件名字
      */
     function unRegisterEvent(evName) {
+        L.d('UnRegister event：' + evName)
         if (evName) {
             delete events[evName]
         } else {
@@ -223,10 +226,27 @@
     /**
      * 触发自定义事件
      * @param evName 事件名字
+     * @param params 触发事件时附带的参数
      */
-    function triggerEvent(evName) {
+    function triggerEvent(evName, params) {
+        L.d('Trigger event：' + evName + '  携带参数:' + JSON.stringify(params))
         if (evName) {
-            document.dispatchEvent(events[evName])
+            let ev = events[evName]
+            let p = {}
+            if (typeof params === 'string') {
+                try {
+                    p = JSON.parse(params)
+                } catch (e) {
+                    L.w('convert event params failed!')
+                }
+            } else {
+                p = params || {}
+            }
+            //将触发时的携带参数与初始化的参数进行合并
+            for (let key in p) {
+                ev.detail[key]=p[key]
+            }
+            document.dispatchEvent(ev)
         } else {
             L.e('trigger event failed! Invalid event name：' + evName);
         }
@@ -247,11 +267,11 @@
                 L.w('The call back with sid=' + sid + ' is no longer exist!')
             }
         },
-        registerEvent: function (evName, params, cancancel, canBubble) {
-            registerEvent(evName, params, cancancel, canBubble)
+        registerEvent: function (evName, params) {
+            registerEvent(evName, params, false, false)
         },
-        triggerEvent: function (evName) {
-            triggerEvent(evName)
+        triggerEvent: function (evName, params) {
+            triggerEvent(evName, params)
         }
     }
 
