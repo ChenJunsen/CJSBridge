@@ -176,6 +176,9 @@ public class CJSBridge2 {
             });
         } else {
             webView.loadUrl("javascript:" + js);
+            if (callBack != null) {
+                callBack.onExecutedJavascript("");
+            }
         }
     }
 
@@ -219,7 +222,7 @@ public class CJSBridge2 {
         //关键点 字符串模板时，第一个事件名字是个字符串，需要加引号，否则会被识别为对象
         String fmt = "CJSBridge.triggerEvent('%1$s',%2$s)";
         try {
-            callH5(webView, String.format(fmt, eventName,params));
+            callH5(webView, String.format(fmt, eventName, params));
         } catch (CJSBException e) {
             e.printStackTrace();
         }
