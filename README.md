@@ -120,3 +120,9 @@ app/src/main/assets
         isCreated=true;
     }
   ```
+  
+# 引入注意
+* 在使用advanced的JSBridge的时候，由于采用了系统的获取硬件信息的方法，需要添加权限
+```
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+```
